@@ -11,17 +11,18 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
-import java.util.List;
 
-
-public class MyServlet extends HttpServlet {
-
+@WebServlet(name = "UpdateServlet")
+public class UpdateServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         StudentService studentService = WebUtils.getBean(StudentService.class);
-        List<Student> list = studentService.findAll();
+        String s_name = request.getParameter("s_name");
+        String s_number = request.getParameter("s_number");
+        int update = studentService.updateStudent(s_name,s_number);
+        Student student = studentService.selectStudentByS_number(s_number);
         HttpSession session = request.getSession();
-        session.setAttribute("students",list);
-        response.sendRedirect(request.getContextPath()+"/helloStudents.jsp");
+        session.setAttribute("studentByS_number",student);
+        response.sendRedirect(request.getContextPath()+"/helloStudentByS_number.jsp");
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

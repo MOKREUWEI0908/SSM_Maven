@@ -15,7 +15,7 @@ import java.util.List;
 public class StudentDaoImpl implements StudentDao {
 
     private List<Student> list = null;
-    @Autowired
+    @Autowired(required = false)
     private JdbcTemplate jdbcTemplate;
 
     public List<Student> findAll(){
@@ -24,10 +24,16 @@ public class StudentDaoImpl implements StudentDao {
         return list;
 
     }
-    public int updateStudent(){
+    public int updateStudent(String s_name,String s_number){
         String sql = "update student set s_name = ? where s_number = ?";
-        int update = jdbcTemplate.update(sql,"哈哈哈哈哈","170207");
+        int update = jdbcTemplate.update(sql,s_name,s_number);
         return update;
+    }
+
+    public Student selectStudentByS_number(String s_number){
+        String sql = "select * from student where s_number = ?";
+        Student stu = jdbcTemplate.queryForObject(sql,new BeanPropertyRowMapper<>(Student.class),s_number);
+        return stu;
     }
 
 }
